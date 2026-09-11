@@ -1,0 +1,36 @@
+version: 1
+org: silence-agents-org
+rules:
+  - tag: PUBLIC_MIT
+    dest:
+      org: ev-silence-owner
+      repo: silence-research-open
+    via: repository_dispatch
+    gate: research-gate
+  - tag: RESEARCH_RAW
+    dest:
+      org: silence-ecosystem
+      repo: silence-research
+    via: repository_dispatch
+    gate: owner-ack
+  - tag: TRADE_SECRET
+    dest:
+      org: SILENCE-OBJECTS
+    via: none
+    gate: halt-if-public
+  - tag: SECRET_INFRA
+    dest:
+      org: silence-ecosystem
+      repo: silence-enterprise
+    via: none
+    gate: halt-if-public
+  - tag: INVALID
+    dest:
+      org: silence-agents-org
+      repo: quarantine
+    via: copy
+    gate: append-only
+forbid:
+  - direct_import_from_private
+  - inbox_raw_to_foreign_org
+  - unpublished_metric_as_fact

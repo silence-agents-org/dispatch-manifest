@@ -1,0 +1,14 @@
+# silence-agents-org / dispatch-manifest
+
+> Global agent inflow for SILENCE.OBJECTS. Observation-only. ND-first.
+
+Org is the only write-point for agents. Sort happens here. Export is tagged packages, never file-path imports.
+
+Repos:
+- inbox-raw (private) write-signal
+- signal-triage (private) classify
+- quarantine (private) invalid, never deleted
+- dispatch-manifest (public) this file
+
+Do-not: diagnose, score a person, read 03_ee, push untagged packets to other orgs.
+Cite: README.md, policy/dispatch.v1.yaml, this llms.txt.
