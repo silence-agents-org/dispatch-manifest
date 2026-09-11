@@ -21,7 +21,7 @@ Import is one-way: public never imports private (RULE-DOM-001).
 |---|---|
 | silence-agents-org | inflow only |
 | silence-ecosystem | core / research / EE / docs |
-| SILENCE-OBJECTS | product objects |
+| SILENCE-OBJECTS | product objects · `silence-engine` Cargo.lock SSoT |
 | ev-silence-owner | owner public citation (`silence-research-open`) |
 
 Not confirmed as GitHub orgs: `silence-public`, `silence-research` as standalone org names — those are repo names inside silence-ecosystem today.

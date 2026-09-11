@@ -12,3 +12,4 @@ Repos:
 
 Do-not: diagnose, score a person, read 03_ee, push untagged packets to other orgs.
 Cite: README.md, policy/dispatch.v1.yaml, this llms.txt.
+Public MIT dest: SILENCE-OBJECTS/silence-engine (cargo-lock-ssot).
