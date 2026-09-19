@@ -1,0 +1,7 @@
+npm run validate:hard-import -- --staged
+status=$?
+if [ "$status" -eq 99 ]; then
+  echo "WORLDHALT: ADR-047 receiver-side validation blocked this commit."
+  exit 99
+fi
+exit "$status"

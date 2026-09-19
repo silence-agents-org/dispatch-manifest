@@ -1,0 +1,73 @@
+name: hard-import-validation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: GATE 1 - dependency-cruiser scan
+        id: gate1
+        continue-on-error: true
+        run: npm run depcruise:report
+      - name: GATE 2 - receiver-side validator
+        id: gate2
+        continue-on-error: true
+        run: npm run validate:hard-import
+      - name: GATE 3 - manifest signature verification
+        id: gate3
+        continue-on-error: true
+        run: node scripts/validate-hard-import.js --verify-signature-only
+      - name: GATE 4 - expired entry detection
+        id: gate4
+        continue-on-error: true
+        run: node scripts/validate-hard-import.js --check-expiry-only
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hard-import-validation-reports
+          if-no-files-found: ignore
+          path: |
+            depcruise-report.json
+            validation-report.json
+      - name: PR status comment
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = [
+              '## ADR-047 hard-import validation',
+              `- GATE 1 depcruise: ${'${{ steps.gate1.outcome }}'}`,
+              `- GATE 2 receiver-side validator: ${'${{ steps.gate2.outcome }}'}`,
+              `- GATE 3 manifest signature: ${'${{ steps.gate3.outcome }}'}`,
+              `- GATE 4 expiry detection: ${'${{ steps.gate4.outcome }}'}`
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });
+      - name: Enforce gates
+        if: always()
+        run: |
+          test "${{ steps.gate1.outcome }}" = success
+          test "${{ steps.gate2.outcome }}" = success
+          test "${{ steps.gate3.outcome }}" = success
+          test "${{ steps.gate4.outcome }}" = success

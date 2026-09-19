@@ -1,0 +1,4 @@
+node_modules/
+coverage/
+validation-report.json
+depcruise-report.json
