@@ -1,7 +1,11 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const cp = require('node:child_process');
 const {
   buildReport,
+  collectExpiredEntries,
   computeManifestSignature,
   findExternalReferences,
   isExpired,
@@ -75,4 +79,45 @@ test('buildReport emits WORLDHALT for expired entries', () => {
   assert.equal(report.exit_code, 99);
   assert.equal(report.worldhalt, true);
   assert.equal(report.violations[0].trigger, 'passive_expired_import');
+});
+
+test('collectExpiredEntries includes expired deprecated imports', () => {
+  const expiredEntries = collectExpiredEntries(
+    {
+      authorized_runtime_references: [],
+      deprecated_imports: [{ from_org: 'external-org', removal_date: '2026-09-18' }]
+    },
+    '2026-09-19'
+  );
+
+  assert.equal(expiredEntries.length, 1);
+  assert.equal(expiredEntries[0].expired_type, 'deprecated_import');
+});
+
+test('verify-signature-only CLI branch writes a success report', () => {
+  const reportPath = path.join(process.cwd(), 'tmp-signature-report.json');
+  const result = cp.spawnSync('node', ['scripts/validate-hard-import.js', '--verify-signature-only'], {
+    cwd: process.cwd(),
+    env: { ...process.env, VALIDATION_REPORT_PATH: reportPath },
+    encoding: 'utf8'
+  });
+
+  assert.equal(result.status, 0);
+  const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+  assert.equal(report.signature_valid, true);
+  fs.unlinkSync(reportPath);
+});
+
+test('check-expiry-only CLI branch writes a success report', () => {
+  const reportPath = path.join(process.cwd(), 'tmp-expiry-report.json');
+  const result = cp.spawnSync('node', ['scripts/validate-hard-import.js', '--check-expiry-only'], {
+    cwd: process.cwd(),
+    env: { ...process.env, VALIDATION_REPORT_PATH: reportPath },
+    encoding: 'utf8'
+  });
+
+  assert.equal(result.status, 0);
+  const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+  assert.deepEqual(report.expired_entries, []);
+  fs.unlinkSync(reportPath);
 });

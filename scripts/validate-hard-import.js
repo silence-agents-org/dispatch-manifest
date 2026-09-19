@@ -7,7 +7,7 @@ const yaml = require('js-yaml');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const MANIFEST_PATH = path.join(REPO_ROOT, 'HARD_IMPORT.manifest.yml');
-const REPORT_PATH = path.join(REPO_ROOT, 'validation-report.json');
+const DEFAULT_REPORT_PATH = path.join(REPO_ROOT, 'validation-report.json');
 const INTERNAL_ORG = 'silence-agents-org';
 const SCANNABLE_EXTENSIONS = new Set([
   '.js', '.cjs', '.mjs', '.jsx', '.ts', '.tsx', '.py', '.rs', '.json', '.yaml', '.yml', '.toml'
@@ -167,9 +167,20 @@ function isRestrictedFile(entry, file) {
   return restricted.length > 0 && !restricted.includes(file);
 }
 
+function collectExpiredEntries(manifest, today) {
+  const authorized = (manifest.authorized_runtime_references || [])
+    .filter((entry) => isExpired(entry.expiry, today))
+    .map((entry) => ({ ...entry, expired_field: 'expiry', expired_type: 'authorized_runtime_reference' }));
+  const deprecated = (manifest.deprecated_imports || [])
+    .filter((entry) => isExpired(entry.removal_date, today))
+    .map((entry) => ({ ...entry, expired_field: 'removal_date', expired_type: 'deprecated_import' }));
+
+  return [...authorized, ...deprecated];
+}
+
 function buildReport({ manifest, signatureValid, expiredEntries, files, references, today }) {
   const authorizedMap = makeEntryMap(manifest.authorized_runtime_references);
-  const deprecated = manifest.deprecated_imports || [];
+  const deprecatedMap = new Map((manifest.deprecated_imports || []).map((entry) => [entry.from_org, entry]));
   const violations = [];
   const warnings = [];
 
@@ -182,16 +193,17 @@ function buildReport({ manifest, signatureValid, expiredEntries, files, referenc
   }
 
   for (const entry of expiredEntries) {
+    const expiredType = (entry.expired_type || 'manifest_entry').replaceAll('_', ' ');
     violations.push({
       file: 'HARD_IMPORT.manifest.yml',
       trigger: 'passive_expired_import',
-      message: `Expired authorized runtime reference: ${entry.to_module || entry.from_org || 'unknown'}`
+      message: `Expired ${expiredType}: ${entry.to_module || entry.from_org || 'unknown'}`
     });
   }
 
   for (const reference of references) {
     const authorization = authorizedMap.get(reference.reference);
-    const deprecatedEntry = deprecated.find((entry) => entry.from_org === reference.org);
+    const deprecatedEntry = deprecatedMap.get(reference.org);
 
     if (deprecatedEntry) {
       warnings.push({
@@ -258,7 +270,12 @@ function buildReport({ manifest, signatureValid, expiredEntries, files, referenc
   };
 }
 
-function writeReport(report, reportPath = REPORT_PATH) {
+function resolveReportPath(argv = process.argv.slice(2)) {
+  const reportArgument = argv.find((arg) => arg.startsWith('--report-path='));
+  return reportArgument ? reportArgument.slice('--report-path='.length) : process.env.VALIDATION_REPORT_PATH || DEFAULT_REPORT_PATH;
+}
+
+function writeReport(report, reportPath = DEFAULT_REPORT_PATH) {
   fs.writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`);
 }
 
@@ -270,10 +287,11 @@ function main(argv = process.argv.slice(2)) {
   const stagedOnly = argv.includes('--staged');
   const verifySignatureOnly = argv.includes('--verify-signature-only');
   const checkExpiryOnly = argv.includes('--check-expiry-only');
+  const reportPath = resolveReportPath(argv);
   const manifest = loadManifest();
   const today = new Date().toISOString().slice(0, 10);
   const signatureValid = manifest.manifest_signature === computeManifestSignature(manifest);
-  const expiredEntries = (manifest.authorized_runtime_references || []).filter((entry) => isExpired(entry.expiry, today));
+  const expiredEntries = collectExpiredEntries(manifest, today);
 
   if (verifySignatureOnly) {
     const report = {
@@ -285,7 +303,7 @@ function main(argv = process.argv.slice(2)) {
       manifest_signature: manifest.manifest_signature,
       computed_signature: computeManifestSignature(manifest)
     };
-    writeReport(report);
+    writeReport(report, reportPath);
     printSummary(report);
     process.exit(report.exit_code);
   }
@@ -298,7 +316,7 @@ function main(argv = process.argv.slice(2)) {
       worldhalt: expiredEntries.length > 0,
       expired_entries: expiredEntries
     };
-    writeReport(report);
+    writeReport(report, reportPath);
     printSummary(report);
     process.exit(report.exit_code);
   }
@@ -312,7 +330,7 @@ function main(argv = process.argv.slice(2)) {
     return findExternalReferences(fs.readFileSync(fullPath, 'utf8'), file);
   });
   const report = buildReport({ manifest, signatureValid, expiredEntries, files, references, today });
-  writeReport(report);
+  writeReport(report, reportPath);
   printSummary(report);
   process.exit(report.exit_code);
 }
@@ -323,12 +341,14 @@ if (require.main === module) {
 
 module.exports = {
   buildReport,
+  collectExpiredEntries,
   computeManifestSignature,
   findExternalReferences,
   isExpired,
   isScannableFile,
   main,
   normalizeDate,
+  resolveReportPath,
   sortDeep,
   walkRelevantFiles
 };
