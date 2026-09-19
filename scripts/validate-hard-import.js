@@ -53,7 +53,7 @@ function loadManifest(manifestPath = DEFAULT_MANIFEST_PATH) {
 
 function listFiles(stagedOnly) {
   if (!stagedOnly) {
-    return walkRelevantFiles(REPO_ROOT);
+    return walkRelevantFiles(REPO_ROOT).sort();
   }
 
   const stdout = cp.execSync('git diff --cached --name-only --diff-filter=ACMR', {
@@ -109,8 +109,7 @@ function walkRelevantFiles(rootDir) {
       files.push(relativePath);
     }
   }
-
-  return files.sort();
+  return files;
 }
 
 function makeEntryMap(entries) {
