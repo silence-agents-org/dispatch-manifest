@@ -1,8 +1,10 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
+  buildReport,
   computeManifestSignature,
   findExternalReferences,
+  isExpired,
   isScannableFile,
   walkRelevantFiles
 } = require('../scripts/validate-hard-import');
@@ -48,4 +50,29 @@ test('walkRelevantFiles skips docs and tests but includes enforcement files', ()
   assert.equal(files.includes('test/validate-hard-import.test.js'), false);
   assert.equal(files.includes('scripts/validate-hard-import.js'), true);
   assert.equal(files.includes('.github/workflows/hard-import-validation.yml'), true);
+});
+
+test('isExpired handles YAML Date objects and ISO strings', () => {
+  assert.equal(isExpired(new Date('2026-09-18T00:00:00Z'), '2026-09-19'), true);
+  assert.equal(isExpired('2026-09-19', '2026-09-19'), false);
+  assert.equal(isExpired('not-a-date', '2026-09-19'), false);
+});
+
+test('buildReport emits WORLDHALT for expired entries', () => {
+  const report = buildReport({
+    manifest: {
+      manifest_signature: 'sha256:test',
+      authorized_runtime_references: [],
+      deprecated_imports: []
+    },
+    signatureValid: true,
+    expiredEntries: [{ to_module: '@external-org/pkg', expiry: new Date('2026-09-18T00:00:00Z') }],
+    files: ['package.json'],
+    references: [],
+    today: '2026-09-19'
+  });
+
+  assert.equal(report.exit_code, 99);
+  assert.equal(report.worldhalt, true);
+  assert.equal(report.violations[0].trigger, 'passive_expired_import');
 });

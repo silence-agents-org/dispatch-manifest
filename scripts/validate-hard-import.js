@@ -136,8 +136,30 @@ function findExternalReferences(content, file) {
   return [...scopedPackages, ...githubRefs].filter((entry) => entry.org !== INTERNAL_ORG);
 }
 
-function isExpired(dateString, today) {
-  return Boolean(dateString) && dateString < today;
+function normalizeDate(value) {
+  if (!value) {
+    return null;
+  }
+  if (value instanceof Date) {
+    return value.toISOString().slice(0, 10);
+  }
+
+  const asString = String(value).trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(asString)) {
+    return asString;
+  }
+
+  const parsed = new Date(asString);
+  if (Number.isNaN(parsed.valueOf())) {
+    return null;
+  }
+  return parsed.toISOString().slice(0, 10);
+}
+
+function isExpired(dateValue, today) {
+  const normalizedDate = normalizeDate(dateValue);
+  const normalizedToday = normalizeDate(today);
+  return Boolean(normalizedDate && normalizedToday) && normalizedDate < normalizedToday;
 }
 
 function isRestrictedFile(entry, file) {
@@ -306,6 +328,7 @@ module.exports = {
   isExpired,
   isScannableFile,
   main,
+  normalizeDate,
   sortDeep,
   walkRelevantFiles
 };
