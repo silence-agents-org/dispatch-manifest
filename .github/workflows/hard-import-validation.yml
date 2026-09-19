@@ -1,0 +1,85 @@
+name: hard-import-validation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      gate1: ${{ steps.gate1.outcome }}
+      gate2: ${{ steps.gate2.outcome }}
+      gate3: ${{ steps.gate3.outcome }}
+      gate4: ${{ steps.gate4.outcome }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: GATE 1 - dependency-cruiser scan
+        id: gate1
+        continue-on-error: true
+        run: npm run depcruise:report
+      - name: GATE 2 - receiver-side validator
+        id: gate2
+        continue-on-error: true
+        run: npm run validate:hard-import
+      - name: GATE 3 - manifest signature verification
+        id: gate3
+        continue-on-error: true
+        run: node scripts/validate-hard-import.js --verify-signature-only
+      - name: GATE 4 - expired entry detection
+        id: gate4
+        continue-on-error: true
+        run: node scripts/validate-hard-import.js --check-expiry-only
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hard-import-validation-reports
+          if-no-files-found: ignore
+          path: |
+            depcruise-report.json
+            validation-report.json
+      - name: Enforce gates
+        if: always()
+        run: |
+          test "${{ steps.gate1.outcome }}" = success
+          test "${{ steps.gate2.outcome }}" = success
+          test "${{ steps.gate3.outcome }}" = success
+          test "${{ steps.gate4.outcome }}" = success
+
+  comment:
+    if: always() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    needs:
+      - validate
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: PR status comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = [
+              '## ADR-047 hard-import validation',
+              `- GATE 1 depcruise: ${'${{ needs.validate.outputs.gate1 }}'}`,
+              `- GATE 2 receiver-side validator: ${'${{ needs.validate.outputs.gate2 }}'}`,
+              `- GATE 3 manifest signature: ${'${{ needs.validate.outputs.gate3 }}'}`,
+              `- GATE 4 expiry detection: ${'${{ needs.validate.outputs.gate4 }}'}`
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });

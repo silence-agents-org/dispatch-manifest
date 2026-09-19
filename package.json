@@ -1,0 +1,28 @@
+{
+  "name": "dispatch-manifest",
+  "version": "1.0.0",
+  "description": "Public policy-as-code for silence-agents-org.",
+  "main": "scripts/validate-hard-import.js",
+  "scripts": {
+    "prepare": "husky",
+    "depcruise": "depcruise --config .dependency-cruiser.js .",
+    "depcruise:report": "depcruise --config .dependency-cruiser.js --output-type json --output-to depcruise-report.json .",
+    "validate:hard-import": "node scripts/validate-hard-import.js",
+    "validate:all": "npm run depcruise:report && npm run validate:hard-import",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/silence-agents-org/dispatch-manifest.git"
+  },
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "dependency-cruiser": "^18.3.1",
+    "husky": "^9.1.7",
+    "js-yaml": "^5.4.2"
+  },
+  "private": true
+}

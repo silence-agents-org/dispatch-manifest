@@ -1,0 +1,13 @@
+version: '1.0'
+policy: receiver-side-validation
+organization: silence-agents-org
+manifest_signature: sha256:28710b5d930ea9fd20a25822fbd2adb02e1e901822369122fbe6bf1e929c23bf
+manifest_last_updated: '2026-09-19'
+authorized_runtime_references: []
+deprecated_imports: []
+worldhalt_triggers:
+  expired_entry_in_use: BLOCK_IMMEDIATELY_EXIT_99
+  signature_mismatch: BLOCK_IMMEDIATELY_EXIT_99
+  passive_expired_import: BLOCK_IMMEDIATELY_EXIT_99
+  unknown_org_reference: BLOCK_IMMEDIATELY_EXIT_99
+  missing_approval: BLOCK_IMMEDIATELY_EXIT_99
