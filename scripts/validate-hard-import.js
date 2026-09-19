@@ -6,7 +6,7 @@ const cp = require('node:child_process');
 const yaml = require('js-yaml');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
-const MANIFEST_PATH = path.join(REPO_ROOT, 'HARD_IMPORT.manifest.yml');
+const DEFAULT_MANIFEST_PATH = path.join(REPO_ROOT, 'HARD_IMPORT.manifest.yml');
 const DEFAULT_REPORT_PATH = path.join(REPO_ROOT, 'validation-report.json');
 const INTERNAL_ORG = 'silence-agents-org';
 const SCANNABLE_EXTENSIONS = new Set([
@@ -31,7 +31,7 @@ function sortDeep(value) {
       .reduce((result, key) => {
         result[key] = sortDeep(value[key]);
         return result;
-      }, {});
+      }, Object.create(null));
   }
   return value;
 }
@@ -42,8 +42,13 @@ function computeManifestSignature(manifest) {
   return `sha256:${crypto.createHash('sha256').update(JSON.stringify(sortDeep(clone))).digest('hex')}`;
 }
 
-function loadManifest() {
-  return yaml.load(fs.readFileSync(MANIFEST_PATH, 'utf8'));
+function resolveManifestPath(argv = process.argv.slice(2)) {
+  const manifestArgument = argv.find((arg) => arg.startsWith('--manifest-path='));
+  return manifestArgument ? manifestArgument.slice('--manifest-path='.length) : process.env.VALIDATION_MANIFEST_PATH || DEFAULT_MANIFEST_PATH;
+}
+
+function loadManifest(manifestPath = DEFAULT_MANIFEST_PATH) {
+  return yaml.load(fs.readFileSync(manifestPath, 'utf8'));
 }
 
 function listFiles(stagedOnly) {
@@ -287,8 +292,9 @@ function main(argv = process.argv.slice(2)) {
   const stagedOnly = argv.includes('--staged');
   const verifySignatureOnly = argv.includes('--verify-signature-only');
   const checkExpiryOnly = argv.includes('--check-expiry-only');
+  const manifestPath = resolveManifestPath(argv);
   const reportPath = resolveReportPath(argv);
-  const manifest = loadManifest();
+  const manifest = loadManifest(manifestPath);
   const today = new Date().toISOString().slice(0, 10);
   const signatureValid = manifest.manifest_signature === computeManifestSignature(manifest);
   const expiredEntries = collectExpiredEntries(manifest, today);
@@ -346,7 +352,9 @@ module.exports = {
   findExternalReferences,
   isExpired,
   isScannableFile,
+  loadManifest,
   main,
+  resolveManifestPath,
   normalizeDate,
   resolveReportPath,
   sortDeep,
