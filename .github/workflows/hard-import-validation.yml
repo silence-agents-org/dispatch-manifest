@@ -19,20 +19,23 @@ jobs:
       gate4: ${{ steps.gate4.outcome }}
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: GATE 1 - dependency-cruiser scan
         id: gate1
         continue-on-error: true
-        run: npm run depcruise:report
+        run: pnpm run depcruise:report
       - name: GATE 2 - receiver-side validator
         id: gate2
         continue-on-error: true
-        run: npm run validate:hard-import
+        run: pnpm run validate:hard-import
       - name: GATE 3 - manifest signature verification
         id: gate3
         continue-on-error: true
