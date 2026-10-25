@@ -59,7 +59,7 @@ Keep manifest changes in Git history with reviewer attribution in the manifest e
 
 - `.github/workflows/hard-import-validation.yml` runs four blocking gates.
 - `.husky/pre-commit` runs staged validation locally.
-- `npm run validate:all` executes the full stack on demand.
+- `pnpm run validate:all` executes the full stack on demand.
 
 ## FAQ
 
