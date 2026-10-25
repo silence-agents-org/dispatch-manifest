@@ -15,7 +15,7 @@
     "type": "git",
     "url": "https://github.com/silence-agents-org/dispatch-manifest.git"
   },
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=22"
   },

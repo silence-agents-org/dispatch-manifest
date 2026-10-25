@@ -27,3 +27,7 @@ Import is one-way: public never imports private (RULE-DOM-001).
 Not confirmed as GitHub orgs: `silence-public`, `silence-research` as standalone org names — those are repo names inside silence-ecosystem today.
 
 Disclaimer: *Non-clinical behavioral protocol. No diagnosis. No therapy.*
+
+## License
+
+Apache-2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
