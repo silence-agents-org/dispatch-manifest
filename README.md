@@ -24,12 +24,12 @@ Import is one-way: public never imports private (RULE-DOM-001).
 | silence-agents-org | inflow only |
 | silence-ecosystem | core / research / EE / docs |
 | SILENCE-OBJECTS | product objects · Cargo.lock SSoT (`PRIVATE_SINK`) |
-| ev-silence-owner | owner public citation (`PRIVATE_SINK`) |
+| ev-silence-owner | owner research + infra (`PRIVATE_SINK`) |
 
 ## Policy notes
 
 - ADR-047 is the HARD_IMPORT policy (see [docs/HARD_IMPORT_POLICY.md](docs/HARD_IMPORT_POLICY.md)). It does not govern tag routing.
-- The `forbid: silence-ecosystem-as-default` rule in `policy/dispatch.v1.yaml` is currently unattributed: no ADR or decision record backs it yet.
+- The `forbid: silence-ecosystem-as-default` rule in `policy/dispatch.v1.yaml` is backed by [ADR-048 (PROPOSED)](docs/ADR-048_routing_destinations.md): `silence-ecosystem` is never a destination for PUBLIC_MIT, RESEARCH_RAW or SECRET_INFRA.
 
 Disclaimer: *Non-clinical behavioral protocol. No diagnosis. No therapy.*
 
