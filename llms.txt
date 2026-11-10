@@ -5,11 +5,9 @@
 Org is the only write-point for agents. Sort happens here. Export is tagged packages, never file-path imports.
 
 Repos:
-- inbox-raw (private) write-signal
-- signal-triage (private) classify
-- quarantine (private) invalid, never deleted
+- private inflow, classify and quarantine repos (names not published)
 - dispatch-manifest (public) this file
 
-Do-not: diagnose, score a person, read 03_ee, push untagged packets to other orgs.
+Do-not: diagnose, score a person, read private EE material, push untagged packets to other orgs.
 Cite: README.md, policy/dispatch.v1.yaml, this llms.txt.
-Public MIT dest: SILENCE-OBJECTS/silence-engine (cargo-lock-ssot).
+Private destinations appear as PRIVATE_SINK. ADR-047 = HARD_IMPORT policy, not routing.
