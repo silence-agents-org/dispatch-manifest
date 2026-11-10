@@ -1,12 +1,10 @@
-# ADR-048: Routing destinations for artifact tags
+# ADR-078: Routing destinations for artifact tags
 
 * **Status:** PROPOSED (DRAFT)
 * **Owner:** Ewa Tchórzewska (ev-silence-owner)
 * **Date:** 2026-11-10
 * **Decision record:** OD-023 (Owner decision, 2026-11-10)
 * **Amends / extends:** `policy/dispatch.v1.yaml`, `docs/HARD_IMPORT_POLICY.md` (ADR-047)
-
-> Numbering note: the number ADR-048 is already used elsewhere in the SILENCE ADR registry. Renumber per the ADR numbering/deduplication decision (OD-019) before this ADR is accepted.
 
 ## 1. Context
 
@@ -21,8 +19,8 @@ Canonical mapping in `policy/dispatch.v1.yaml`:
 | Tag | Destination org | Destination repo |
 |---|---|---|
 | `PUBLIC_MIT` | `SILENCE-OBJECTS` | `PRIVATE_SINK` |
-| `RESEARCH_RAW` | `ev-silence-owner` | `PRIVATE_SINK` (private owner research repo; target repo to be created by Ewa) |
-| `SECRET_INFRA` | `ev-silence-owner` | `PRIVATE_SINK` (private infra repo; target repo to be created by Ewa) |
+| `RESEARCH_RAW` | `ev-silence-owner` | `PRIVATE_SINK` (private Owner research repository) |
+| `SECRET_INFRA` | `ev-silence-owner` | `PRIVATE_SINK` (private Owner infra repository) |
 
 `PRIVATE_SINK` is an alias; the concrete private repository names are held by the Owner outside this public repository.
 
@@ -30,6 +28,6 @@ Canonical mapping in `policy/dispatch.v1.yaml`:
 
 ## 3. Consequences
 
-* The `forbid: silence-ecosystem-as-default` rule in `policy/dispatch.v1.yaml` gets a normative basis (this ADR).
+* The `forbid: silence-ecosystem-as-default` rule in `policy/dispatch.v1.yaml` gets a normative basis (ADR-078).
 * The private classifier taxonomy must stay in sync with `policy/dispatch.v1.yaml`, which is the single source of truth for routing.
-* Until the two `ev-silence-owner` target repositories exist, `RESEARCH_RAW` and `SECRET_INFRA` have no live receiver and must not be dispatched.
+* The two private `ev-silence-owner` target repositories (aliased as `PRIVATE_SINK`) will be created by the Owner. Until they exist, `RESEARCH_RAW` and `SECRET_INFRA` packets are held at the receiving layer and are not dispatched; nothing is exposed publicly or imported in the meantime.
