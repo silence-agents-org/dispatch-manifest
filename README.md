@@ -2,7 +2,9 @@
 
 Public policy-as-code for [silence-agents-org](https://github.com/silence-agents-org).
 
-Agents write to private `inbox-raw`. Classification happens in `signal-triage`. Invalid records go to `quarantine`. This repository is the only public routing table.
+Agents write to a private inflow repo. Classification and quarantine happen in private repos of this org. This repository is the only public routing table and the single source of truth for routing ([policy/dispatch.v1.yaml](policy/dispatch.v1.yaml)).
+
+Private destinations are written as the alias `PRIVATE_SINK`; the concrete mapping is held by the owner outside this public repo.
 
 Import is one-way: public never imports private (RULE-DOM-001).
 
@@ -21,10 +23,13 @@ Import is one-way: public never imports private (RULE-DOM-001).
 |---|---|
 | silence-agents-org | inflow only |
 | silence-ecosystem | core / research / EE / docs |
-| SILENCE-OBJECTS | product objects · `silence-engine` Cargo.lock SSoT |
-| ev-silence-owner | owner public citation (`silence-research-open`) |
+| SILENCE-OBJECTS | product objects · Cargo.lock SSoT (`PRIVATE_SINK`) |
+| ev-silence-owner | owner public citation (`PRIVATE_SINK`) |
 
-Not confirmed as GitHub orgs: `silence-public`, `silence-research` as standalone org names — those are repo names inside silence-ecosystem today.
+## Policy notes
+
+- ADR-047 is the HARD_IMPORT policy (see [docs/HARD_IMPORT_POLICY.md](docs/HARD_IMPORT_POLICY.md)). It does not govern tag routing.
+- The `forbid: silence-ecosystem-as-default` rule in `policy/dispatch.v1.yaml` is currently unattributed: no ADR or decision record backs it yet.
 
 Disclaimer: *Non-clinical behavioral protocol. No diagnosis. No therapy.*
 

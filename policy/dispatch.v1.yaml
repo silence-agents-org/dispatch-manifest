@@ -1,36 +1,38 @@
 version: 1
 org: silence-agents-org
+# PRIVATE_SINK = private destination resolved outside this public repo (owner-held mapping).
 rules:
   - tag: PUBLIC_MIT
     dest:
       org: SILENCE-OBJECTS
-      repo: silence-engine
+      repo: PRIVATE_SINK
     via: repository_dispatch
     gate: cargo-lock-ssot
   - tag: RESEARCH_RAW
     dest:
       org: ev-silence-owner
-      repo: silence-research-open
+      repo: PRIVATE_SINK
     via: repository_dispatch
     gate: owner-ack
   - tag: TRADE_SECRET
     dest:
-      org: SILENCE-OBJECTS
+      org: PRIVATE_SINK
     via: none
     gate: halt-if-public
   - tag: SECRET_INFRA
     dest:
-      org: ev-silence-owner
+      org: PRIVATE_SINK
     via: none
     gate: halt-if-public
   - tag: INVALID
     dest:
       org: silence-agents-org
-      repo: quarantine
+      repo: PRIVATE_SINK
     via: copy
     gate: append-only
 forbid:
   - direct_import_from_private
   - inbox_raw_to_foreign_org
   - unpublished_metric_as_fact
+  # Unattributed: no ADR/decision record found for this rule. ADR-047 covers HARD_IMPORT, not routing.
   - silence-ecosystem-as-default
