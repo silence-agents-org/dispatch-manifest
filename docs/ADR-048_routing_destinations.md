@@ -3,6 +3,7 @@
 * **Status:** PROPOSED (DRAFT)
 * **Owner:** Ewa Tchórzewska (ev-silence-owner)
 * **Date:** 2026-11-10
+* **Decision record:** OD-023 (Owner decision, 2026-11-10)
 * **Amends / extends:** `policy/dispatch.v1.yaml`, `docs/HARD_IMPORT_POLICY.md` (ADR-047)
 
 > Numbering note: the number ADR-048 is already used elsewhere in the SILENCE ADR registry. Renumber per the ADR numbering/deduplication decision (OD-019) before this ADR is accepted.
