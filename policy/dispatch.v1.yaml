@@ -1,7 +1,7 @@
 version: 1
 org: silence-agents-org
 # PRIVATE_SINK = private destination resolved outside this public repo (owner-held mapping).
-# Destinations per ADR-048 (PROPOSED): docs/ADR-048_routing_destinations.md
+# Destinations per ADR-078 (PROPOSED): docs/ADR-078_routing_destinations.md
 rules:
   - tag: PUBLIC_MIT
     dest:
@@ -12,7 +12,7 @@ rules:
   - tag: RESEARCH_RAW
     dest:
       org: ev-silence-owner
-      repo: PRIVATE_SINK  # target repo to be created by Ewa
+      repo: PRIVATE_SINK  # to be created by the Owner; packets held until then
     via: repository_dispatch
     gate: owner-ack
   - tag: TRADE_SECRET
@@ -23,7 +23,7 @@ rules:
   - tag: SECRET_INFRA
     dest:
       org: ev-silence-owner
-      repo: PRIVATE_SINK  # target repo to be created by Ewa
+      repo: PRIVATE_SINK  # to be created by the Owner; packets held until then
     via: none
     gate: halt-if-public
   - tag: INVALID
@@ -36,5 +36,5 @@ forbid:
   - direct_import_from_private
   - inbox_raw_to_foreign_org
   - unpublished_metric_as_fact
-  # ADR-048 (PROPOSED): silence-ecosystem is never a destination for PUBLIC_MIT, RESEARCH_RAW, SECRET_INFRA.
+  # ADR-078 (PROPOSED): silence-ecosystem is never a destination for PUBLIC_MIT, RESEARCH_RAW, SECRET_INFRA.
   - silence-ecosystem-as-default
