@@ -1,0 +1,66 @@
+LICENSE-CLOSED-MODULES
+All rights reserved, © Ewa Tchórzewska
+Copyright (c) 2026 Ewa Tchórzewska (osoba fizyczna). Wszelkie prawa zastrzeżone.
+Wersja 1.1, Warszawa, 11.11.2026
+
+1. Podmiot praw
+Jedynym podmiotem autorskich praw majątkowych do kodu źródłowego, aplikacji,
+kodu wynikowego, produktów, obrazów, protokołów, promptów, benchmarków, wyników badań,
+dokumentacji i zasobów towarzyszących (dalej: „Materiał") jest Ewa
+Tchórzewska jako osoba fizyczna („Owner").
+
+2. Zakres zastrzeżenia
+Materiał jest objęty wyłączną ochroną prawa autorskiego. Nie jest udzielana
+żadna licencja — wyraźna, domniemana ani dorozumiana — w szczególności
+licencja open source. Bez uprzedniej pisemnej zgody Ownera zabronione jest:
+a) używanie, kopiowanie, modyfikowanie, tworzenie dzieł zależnych;
+b) dystrybucja, sublicencjonowanie, publiczne udostępnianie;
+c) wykorzystanie komercyjne;
+d) udostępnianie w formie pliku do pobrania lub uruchomienia, chyba że
+   wynika to z odrębnej pisemnej umowy z Ownerem;
+e) podejmowanie prób obejścia niniejszych ograniczeń, w tym przez
+   dekompilację, inżynierię wsteczną lub ekstrakcję elementów Materiału
+   w celu ponownego wykorzystania poza zakresem dozwolonym przez prawo;
+f) eksploracja tekstów i danych (text and data mining) oraz wykorzystanie
+   Materiału do trenowania, dostrajania lub ewaluacji modeli sztucznej
+   inteligencji. Owner wyraźnie zastrzega to na podstawie art. 26³
+   ustawy o prawie autorskim i prawach pokrewnych.
+
+3. Granice ochrony
+Ochrona prawno-autorska nie stanowi grantu patentowego, nie zastępuje
+zgłoszenia patentowego, rejestracji znaku towarowego ani umowy NDA.
+Komponenty oznaczone jako TRADE_SECRET lub RESEARCH_RAW stanowią tajemnicę
+przedsiębiorstwa Ownera: nie wolno ich ujawniać, przeglądać poza zakresem
+udzielonego dostępu ani przekazywać osobom trzecim w jakiejkolwiek formie.
+
+4. Dozwolony użytek ustawowy
+Nic w niniejszym pliku nie wyłącza ani nie ogranicza uprawnień wynikających
+z ustawowych wyjątków i ograniczeń prawa autorskiego, w szczególności
+z art. 75 ust. 2 w związku z art. 76 (programy komputerowe) oraz art. 23–35
+w zakresie, w jakim mają zastosowanie, ustawy z dnia 4 lutego 1994 r.
+o prawie autorskim i prawach pokrewnych. Postanowienia punktu 2 lit. e)
+nie mogą być wykładane jako zakaz czynności dozwolonych na podstawie tych
+przepisów.
+
+5. Prawo właściwe i sąd
+Do niniejszego pliku i wszelkich sporów z nim związanych stosuje się prawo
+polskie. Sądem właściwym jest sąd powszechny w Warszawie.
+
+6. Kontakt w sprawie zgody
+ewa.tchorzewska@globalx.pl
+
+7. Wersje językowe
+W razie rozbieżności rozstrzyga wersja polska.
+
+English version
+Copyright (c) 2026 Ewa Tchórzewska. All rights reserved.
+Version 1.1, Warsaw, 11 November 2026.
+
+No part of this source code, applications, object code, products, images, protocols,
+prompts, benchmarks, research results or documentation may be reproduced,
+distributed, modified, sublicensed, or used in any form or by any means
+without the prior written permission of the copyright holder. Text and data
+mining and use for training, fine-tuning or evaluating AI models are
+expressly reserved (Art. 26³ of the Polish Copyright Act). Governed by
+Polish law; courts in Warsaw have jurisdiction.
+Contact: ewa.tchorzewska@globalx.pl
