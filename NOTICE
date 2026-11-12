@@ -1,11 +1,11 @@
-dispatch-manifest
-Copyright 2026 Ewa Tchórzewska
-SILENCE, PatternLens and LEO are trademarks; see TRADEMARKS.md if present. The license does not grant trademark rights.
-
-------------------------------------------------------------------------
-
 SILENCE.OBJECTS — Autorstwo i nazewnictwo / Authorship and naming
-Copyright (c) 2026 Ewa Tchórzewska.
+Copyright (c) 2026 Ewa Tchórzewska (osoba fizyczna). Wszelkie prawa zastrzeżone.
+
+Podmiot praw / Rights holder
+
+  Ewa Tchórzewska (Owner) — jedyny podmiot autorskich praw majątkowych
+  do całości repozytorium / sole holder of the economic copyright
+  in this entire repository.
 
 Autorska relacja / Authorship chain
 
@@ -24,10 +24,9 @@ Nazewnictwo / Naming
   Soft-Noir                publiczna nazwa design systemu / public name of the design system
   soft-noir, SoftNoir*     identyfikatory techniczne w kodzie — nie są zmieniane
 
-Autorką wymienionych elementów jest Ewa Tchórzewska. Nazwy są oznaczeniami
-Ownera; nie są (jeszcze) zarejestrowanymi znakami towarowymi i nie są
-oznaczane symbolem ®.
+Autorką wymienionych elementów jest Ewa Tchórzewska (Owner). Nazwy są
+oznaczeniami Ownera; nie są (jeszcze) zarejestrowanymi znakami towarowymi
+i nie są oznaczane symbolem ®.
 
-Kod tego repozytorium jest objęty licencją zamkniętą (LICENSE).
-Nie jest udzielana żadna licencja — wyraźna, domniemana ani dorozumiana.
-Wszelkie prawa zastrzeżone.
+Całość repozytorium objęta jest licencją zamkniętą (LICENSE). Komponenty osób
+trzecich, jeśli występują, wymienia THIRD_PARTY_NOTICES.md wraz z ich licencjami.

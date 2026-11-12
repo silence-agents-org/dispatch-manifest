@@ -15,7 +15,7 @@ Import is one-way: public never imports private (RULE-DOM-001).
 | RAW | agent capture | no |
 | STRUCTURE | schema + lineage + hash + signer + purpose tag | hashed only |
 | PRODUCT | Insight Pack / EE | never public |
-| PUBLISH | docs, llms.txt, MIT modules | yes, tagged PUBLIC_MIT |
+| PUBLISH | docs, llms.txt, modules cleared by the Owner | yes, tagged PUBLIC_MIT |
 
 ## Destination orgs (handles that exist)
 
@@ -35,8 +35,8 @@ Disclaimer: *Non-clinical behavioral protocol. No diagnosis. No therapy.*
 
 ## License
 
+**Copyright (c) 2026 Ewa Tchórzewska (osoba fizyczna). Wszelkie prawa zastrzeżone.**
 
-All rights reserved, © Ewa Tchórzewska
-Wszelkie prawa zastrzeżone, © Ewa Tchórzewska
+Podmiot praw / Rights holder: **Ewa Tchórzewska (Owner)**. Licencja zamknięta / Closed licence: [`LICENSE`](LICENSE). Autorstwo i nazewnictwo / Authorship and naming: [`NOTICE`](NOTICE).
 
-Closed licence. All rights reserved; no open-source licence is granted. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+Kopiowanie, publikacja, modyfikacja oraz eksploracja tekstów i danych (w tym trenowanie AI) wymagają uprzedniej pisemnej zgody Ownera. Copying, publication, modification and text and data mining (including AI training) require the Owner's prior written consent.
